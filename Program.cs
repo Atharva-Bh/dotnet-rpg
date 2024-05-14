@@ -1,3 +1,5 @@
+global using dotnet_rpg.Models;
+global using dotnet_rpg.Service.CharacterService;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
