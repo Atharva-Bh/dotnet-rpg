@@ -13,7 +13,6 @@ namespace dotnet_rpg.Service.CharacterService
         public CharacterService(IMapper mapper)
         {
             _mapper = mapper;
-            
         }
 
         public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
@@ -26,6 +25,25 @@ namespace dotnet_rpg.Service.CharacterService
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacter(int id)
+        {
+            var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+            try{
+            var character = characters.First(c => c.ID == id);
+            if(character is null)
+            {
+                throw new Exception($"Character with ID {id} , to be deleted , not found!");
+            }
+            characters.Remove(character);
+            serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(characters);
+            }
+            catch(Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
         public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
