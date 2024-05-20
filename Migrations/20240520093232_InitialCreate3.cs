@@ -1,11 +1,11 @@
-﻿/*using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace dotnet_rpg.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialCreate3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,4 +36,4 @@ namespace dotnet_rpg.Migrations
                 name: "Characters");
         }
     }
-}*/
+}
