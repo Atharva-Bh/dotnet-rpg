@@ -10,9 +10,11 @@ namespace dotnet_rpg.Service.CharacterService
             }
         };
         private readonly IMapper _mapper;
-        public CharacterService(IMapper mapper)
+        //private readonly DataContext _context;  
+        public CharacterService(IMapper mapper  /*DataContext context*/)
         {
             _mapper = mapper;
+           // _context = context;
         }
 
         public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
@@ -47,6 +49,7 @@ namespace dotnet_rpg.Service.CharacterService
         public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+            //var dbCharacters = await _context.Characters.ToListAsync();
             serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(characters);
             return serviceResponse;
         }

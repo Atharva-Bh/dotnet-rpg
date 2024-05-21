@@ -11,8 +11,8 @@ using dotnet_rpg.Data;
 namespace dotnet_rpg.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240520111340_InitialCreate7")]
-    partial class InitialCreate7
+    [Migration("20240521060648_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
