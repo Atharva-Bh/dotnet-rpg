@@ -2,7 +2,7 @@ global using dotnet_rpg.Models;
 global using dotnet_rpg.Service.CharacterService;
 global using dotnet_rpg.Dtos.Character;
 global using AutoMapper;
-using dotnet_rpg.Data;
+global using dotnet_rpg.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<ICharacterService , CharacterService>();
+builder.Services.AddScoped<IAuthRepository , AuthRepository>();
 
 var app = builder.Build();
 
