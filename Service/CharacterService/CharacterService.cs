@@ -1,26 +1,32 @@
 
 
+using System.Security.Claims;
+
 namespace dotnet_rpg.Service.CharacterService
 {
     public class CharacterService : ICharacterService
     {
         private readonly IMapper _mapper;
-        private readonly DataContext _context;  
-        public CharacterService(IMapper mapper , DataContext context)
+        private readonly DataContext _context; 
+        private readonly IHttpContextAccessor _httpContextAccessor; 
+        public CharacterService(IMapper mapper , DataContext context , IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
            _context = context;
+           _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
             var characterDto = _mapper.Map<Character>(newCharacter);
+            characterDto.User = await _context.Users.FirstOrDefaultAsync(u => u.ID == GetUserID());
             _context.Characters.Add(characterDto);
             await _context.SaveChangesAsync();
             serviceResponse.Data = await _context.Characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToListAsync();
             return serviceResponse;
         }
+        private int GetUserID() => int.Parse(_httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
         public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacter(int id)
         {
@@ -45,7 +51,7 @@ namespace dotnet_rpg.Service.CharacterService
         public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            var dbCharacters = await _context.Characters.ToListAsync();
+            var dbCharacters = await _context.Characters.Where(c => c.User!.ID == GetUserID()).ToListAsync();
             serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(dbCharacters);
             return serviceResponse;
         }
