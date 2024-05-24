@@ -3,8 +3,8 @@ global using dotnet_rpg.Service.CharacterService;
 global using dotnet_rpg.Dtos.Character;
 global using AutoMapper;
 global using dotnet_rpg.Data;
+global using dotnet_rpg.Dtos.Wea
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;

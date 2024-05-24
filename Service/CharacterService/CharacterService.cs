@@ -23,7 +23,7 @@ namespace dotnet_rpg.Service.CharacterService
             characterDto.User = await _context.Users.FirstOrDefaultAsync(u => u.ID == GetUserID());
             _context.Characters.Add(characterDto);
             await _context.SaveChangesAsync();
-            serviceResponse.Data = await _context.Characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToListAsync();
+            serviceResponse.Data = await _context.Characters.Where(c => c.User!.ID == GetUserID()).Select(c => _mapper.Map<GetCharacterDto>(c)).ToListAsync();
             return serviceResponse;
         }
         private int GetUserID() => int.Parse(_httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -32,14 +32,14 @@ namespace dotnet_rpg.Service.CharacterService
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
             try{
-            var character = await _context.Characters.FirstAsync(c => c.ID == id);
+            var character = await _context.Characters.FirstAsync(c => c.ID == id && c.User!.ID == GetUserID());
             if(character is null)
             {
                 throw new Exception($"Character with ID {id} , to be deleted , not found!");
             }
             _context.Characters.Remove(character);
             await _context.SaveChangesAsync();
-            serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(_context.Characters);
+            serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(_context.Characters.Where(c => c.User!.ID == GetUserID()));
             }
             catch(Exception ex)
             {
@@ -60,7 +60,7 @@ namespace dotnet_rpg.Service.CharacterService
         {
             var serviceResponse = new ServiceResponse<GetCharacterDto>();
             try{
-            var dbCharacter= await _context.Characters.FirstOrDefaultAsync(c => c.ID == id);
+            var dbCharacter= await _context.Characters.FirstOrDefaultAsync(c => c.ID == id && c.User!.ID == GetUserID());
             if(dbCharacter is null)
             {
                 throw new Exception($"Character with ID {id} not found!");
@@ -79,8 +79,8 @@ namespace dotnet_rpg.Service.CharacterService
         {
             var serviceResponse = new ServiceResponse<GetCharacterDto>();
             try{
-            var character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == updatedCharacter.ID);
-            if(character is null)
+            var character = await _context.Characters.Include(c => c.User).FirstOrDefaultAsync(c => c.ID == updatedCharacter.ID);
+            if(character is null || character.User!.ID != GetUserID())
             {
                 throw new Exception($"Character with ID {updatedCharacter.ID} not found!");
             }
