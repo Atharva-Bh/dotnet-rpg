@@ -3,7 +3,7 @@ global using dotnet_rpg.Service.CharacterService;
 global using dotnet_rpg.Dtos.Character;
 global using AutoMapper;
 global using dotnet_rpg.Data;
-global using dotnet_rpg.Dtos.Wea
+global using dotnet_rpg.Service.WeaponService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Filters;
@@ -39,6 +39,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IWeaponService , WeaponService>();
 
 var app = builder.Build();
 
