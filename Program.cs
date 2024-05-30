@@ -4,10 +4,12 @@ global using dotnet_rpg.Dtos.Character;
 global using AutoMapper;
 global using dotnet_rpg.Data;
 global using dotnet_rpg.Service.WeaponService;
+global using dotnet_rpg.Service.FightService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -40,6 +42,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IWeaponService , WeaponService>();
+builder.Services.AddScoped<IFightService , FightService>();
 
 var app = builder.Build();
 
